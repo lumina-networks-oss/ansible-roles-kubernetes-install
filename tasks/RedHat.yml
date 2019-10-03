@@ -1,0 +1,62 @@
+---
+- name: Add K8s YUM repository
+  yum_repository:
+    name: kubernetes
+    description: Kubernetes repository.
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    gpgcheck: true
+    repo_gpgcheck: true
+    gpgkey:
+      - https://packages.cloud.google.com/yum/doc/yum-key.gpg
+      - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    state: present
+  become: true
+
+- name: Install K8s and dependencies
+  yum:
+    name:
+      - docker
+      - kubeadm
+    state: present
+  become: true
+
+- name: Ensure "docker" group exists
+  group:
+    name: docker
+    state: present
+  become: true
+
+- name: Add centos user to docker group
+  user:
+    name: ubuntu
+    groups: docker
+    append: true
+  become: true
+
+- name: Enable the Docker service
+  systemd:
+    name: docker
+    enabled: true
+    state: started
+  become: true
+
+- name: Enable the Kubelet service
+  systemd:
+    name: docker
+    enabled: true
+    state: started
+  become: true
+
+- name: Set net.bridge.bridge-nf-call-iptables=1
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+  become: true
+
+- name: Disable SELinux
+  selinux:
+    state: disabled
+  become: true
