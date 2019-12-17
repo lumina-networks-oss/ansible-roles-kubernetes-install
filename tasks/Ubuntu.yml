@@ -16,7 +16,6 @@
 - name: Install K8s and dependencies
   apt:
     name:
-      - docker.io
       - kubeadm
     state: present
   become: true
@@ -35,22 +34,9 @@
       }
   become: true
 
-- name: Ensure "docker" group exists
-  group:
-    name: docker
-    state: present
-  become: true
-
 - name: Add ubuntu user to docker group
   user:
     name: ubuntu
     groups: docker
     append: true
-  become: true
-
-- name: Enable the Docker service
-  systemd:
-    name: docker
-    enabled: true
-    state: started
   become: true

@@ -15,36 +15,15 @@
 - name: Install K8s and dependencies
   yum:
     name:
-      - docker
       - kubeadm
-    state: present
-  become: true
-
-- name: Ensure "docker" group exists
-  group:
-    name: docker
     state: present
   become: true
 
 - name: Add centos user to docker group
   user:
-    name: ubuntu
+    name: centos
     groups: docker
     append: true
-  become: true
-
-- name: Enable the Docker service
-  systemd:
-    name: docker
-    enabled: true
-    state: started
-  become: true
-
-- name: Enable the Kubelet service
-  systemd:
-    name: docker
-    enabled: true
-    state: started
   become: true
 
 - name: Set net.bridge.bridge-nf-call-iptables=1
