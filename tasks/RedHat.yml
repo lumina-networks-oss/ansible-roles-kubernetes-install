@@ -26,15 +26,6 @@
     append: true
   become: true
 
-- name: Set net.bridge.bridge-nf-call-iptables=1
-  sysctl:
-    name: net.bridge.bridge-nf-call-iptables
-    value: 1
-    sysctl_set: yes
-    state: present
-    reload: yes
-  become: true
-
 - name: Disable SELinux
   selinux:
     state: disabled
